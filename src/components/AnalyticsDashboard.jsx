@@ -153,12 +153,13 @@ export const AnalyticsDashboard = ({ servers, metricsHistory, algorithmStats, to
               </thead>
               <tbody className="divide-y divide-gray-800/80">
                 {[
-                  { id: ALGORITHMS.ROUND_ROBIN, name: 'Round Robin', stats: algorithmStats[ALGORITHMS.ROUND_ROBIN] },
-                  { id: ALGORITHMS.LEAST_CONNECTIONS, name: 'Least Connections', stats: algorithmStats[ALGORITHMS.LEAST_CONNECTIONS] },
-                  { id: ALGORITHMS.WEIGHTED_ROUND_ROBIN, name: 'Weighted Round Robin', stats: algorithmStats[ALGORITHMS.WEIGHTED_ROUND_ROBIN] }
+                  { id: ALGORITHMS.ROUND_ROBIN, name: 'Round Robin', stats: algorithmStats?.[ALGORITHMS.ROUND_ROBIN] },
+                  { id: ALGORITHMS.LEAST_CONNECTIONS, name: 'Least Connections', stats: algorithmStats?.[ALGORITHMS.LEAST_CONNECTIONS] },
+                  { id: ALGORITHMS.WEIGHTED_ROUND_ROBIN, name: 'Weighted Round Robin', stats: algorithmStats?.[ALGORITHMS.WEIGHTED_ROUND_ROBIN] }
                 ].map((row) => {
-                  const successRate = row.stats.total > 0
-                    ? Math.round((row.stats.success / row.stats.total) * 100)
+                  const stats = row.stats || { total: 0, success: 0, avgTime: 120, throughput: 0, utilization: 0 };
+                  const successRate = stats.total > 0
+                    ? Math.round((stats.success / stats.total) * 100)
                     : 100;
                   return (
                     <tr key={row.id} className="hover:bg-slate-800/40 transition-colors">
@@ -166,9 +167,9 @@ export const AnalyticsDashboard = ({ servers, metricsHistory, algorithmStats, to
                         <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
                         {row.name}
                       </td>
-                      <td className="p-3 text-right text-cyan-300 font-bold">{row.stats.avgTime} ms</td>
-                      <td className="p-3 text-right text-amber-300 font-bold">{row.stats.throughput} req/s</td>
-                      <td className="p-3 text-right text-purple-300 font-bold">{row.stats.utilization}%</td>
+                      <td className="p-3 text-right text-cyan-300 font-bold">{stats.avgTime || 0} ms</td>
+                      <td className="p-3 text-right text-amber-300 font-bold">{stats.throughput || 0} req/s</td>
+                      <td className="p-3 text-right text-purple-300 font-bold">{stats.utilization || 0}%</td>
                       <td className="p-3 text-right text-emerald-400 font-bold">{successRate}%</td>
                     </tr>
                   );

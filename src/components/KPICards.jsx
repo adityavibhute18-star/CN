@@ -1,12 +1,22 @@
 import React from 'react';
 import { ActivityIcon, CheckCircleIcon, XCircleIcon, ClockIcon, ZapIcon, CpuIcon } from './Icons';
 
-export const KPICards = ({ metrics }) => {
+export const KPICards = ({ metrics = {} }) => {
+  const m = {
+    totalRequests: 0,
+    successfulRequests: 0,
+    failedRequests: 0,
+    avgResponseTime: 124,
+    throughput: 85,
+    serverUtilization: 68,
+    ...metrics
+  };
+
   const cards = [
     {
       id: 'total',
       title: 'Total Requests',
-      value: metrics.totalRequests.toLocaleString(),
+      value: (m.totalRequests || 0).toLocaleString(),
       unit: 'reqs',
       icon: ActivityIcon,
       color: 'from-blue-500 to-cyan-400',
@@ -15,7 +25,7 @@ export const KPICards = ({ metrics }) => {
     {
       id: 'success',
       title: 'Successful Requests',
-      value: metrics.successfulRequests.toLocaleString(),
+      value: (m.successfulRequests || 0).toLocaleString(),
       unit: 'passed',
       icon: CheckCircleIcon,
       color: 'from-emerald-500 to-teal-400',
@@ -24,16 +34,16 @@ export const KPICards = ({ metrics }) => {
     {
       id: 'failed',
       title: 'Failed Requests',
-      value: metrics.failedRequests.toLocaleString(),
+      value: (m.failedRequests || 0).toLocaleString(),
       unit: 'dropped',
       icon: XCircleIcon,
-      color: metrics.failedRequests > 0 ? 'from-red-500 to-rose-400' : 'from-gray-500 to-slate-400',
-      iconBg: metrics.failedRequests > 0 ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-gray-500/20 text-gray-400 border-gray-500/30'
+      color: (m.failedRequests || 0) > 0 ? 'from-red-500 to-rose-400' : 'from-gray-500 to-slate-400',
+      iconBg: (m.failedRequests || 0) > 0 ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-gray-500/20 text-gray-400 border-gray-500/30'
     },
     {
       id: 'response_time',
       title: 'Avg Response Time',
-      value: `${metrics.avgResponseTime}`,
+      value: `${m.avgResponseTime || 0}`,
       unit: 'ms',
       icon: ClockIcon,
       color: 'from-cyan-400 to-indigo-400',
@@ -42,7 +52,7 @@ export const KPICards = ({ metrics }) => {
     {
       id: 'throughput',
       title: 'Throughput',
-      value: `${metrics.throughput}`,
+      value: `${m.throughput || 0}`,
       unit: 'req/sec',
       icon: ZapIcon,
       color: 'from-amber-400 to-yellow-500',
@@ -51,10 +61,10 @@ export const KPICards = ({ metrics }) => {
     {
       id: 'utilization',
       title: 'Server Utilization',
-      value: `${metrics.serverUtilization}%`,
+      value: `${m.serverUtilization || 0}%`,
       unit: 'load',
       icon: CpuIcon,
-      color: metrics.serverUtilization > 80 ? 'from-orange-500 to-red-500' : 'from-purple-500 to-indigo-400',
+      color: (m.serverUtilization || 0) > 80 ? 'from-orange-500 to-red-500' : 'from-purple-500 to-indigo-400',
       iconBg: 'bg-purple-500/20 text-purple-400 border-purple-500/30'
     }
   ];

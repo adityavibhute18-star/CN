@@ -2,8 +2,8 @@ import React from 'react';
 import { ALGORITHM_NAMES } from '../engine/simulationEngine';
 import { ServerIcon, ActivityIcon, ZapIcon, LayersIcon, CheckCircleIcon } from './Icons';
 
-export const LoadBalancerCard = ({ algorithm, activeConnections, totalRequests, servers, recentLogs }) => {
-  const healthyCount = servers.filter(s => s.status === 'ONLINE').length;
+export const LoadBalancerCard = ({ algorithm, activeConnections = 0, totalRequests = 0, servers = [], recentLogs = [] }) => {
+  const healthyCount = (servers || []).filter(s => s.status === 'ONLINE').length;
 
   return (
     <div className="glass-card p-6 my-8 border-cyan-500/40 relative overflow-hidden">
@@ -76,7 +76,7 @@ export const LoadBalancerCard = ({ algorithm, activeConnections, totalRequests, 
               Total Requests Routed
             </span>
             <div className="text-2xl font-extrabold text-white font-mono">
-              {totalRequests.toLocaleString()}
+              {(totalRequests || 0).toLocaleString()}
             </div>
             <div className="text-[11px] text-emerald-400 font-mono mt-0.5">
               100% Routing Accuracy
